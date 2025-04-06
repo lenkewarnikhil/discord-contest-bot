@@ -1,4 +1,3 @@
-// daily-messages.js
 const { Client, GatewayIntentBits, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const cron = require('node-cron');
 
@@ -86,6 +85,20 @@ function setupDailyMessages() {
   }, {
     timezone: "Asia/Kolkata"
   });
+
+  // 2nd Year Reminder at 10:50 AM
+  cron.schedule('50 10 * * *', () => {
+    sendReminderMessage("2nd Year");
+  }, {
+    timezone: "Asia/Kolkata"
+  });
+
+  // 3rd Year Reminder at 12:30 PM
+  cron.schedule('30 12 * * *', () => {
+    sendReminderMessage("3rd Year");
+  }, {
+    timezone: "Asia/Kolkata"
+  });
 }
 
 async function sendGoodMorningMessage() {
@@ -138,5 +151,20 @@ async function sendGoodNightMessage() {
     console.log('Good night message with poll sent successfully');
   } catch (error) {
     console.error('Error sending good night message:', error);
+  }
+}
+
+async function sendReminderMessage(year) {
+  try {
+    const channel = await client.channels.fetch(MORNING_CHANNEL_ID);
+    if (!channel) return console.error("Channel not found");
+
+    await channel.send({
+      content: `@everyone\n\n📚 **Reminder for ${year} students**\n\nPlease make sure to **revise today's notes** after reaching home! Consistency is key 🔑`
+    });
+
+    console.log(`Reminder message sent for ${year} students`);
+  } catch (error) {
+    console.error(`Error sending reminder message for ${year}:`, error);
   }
 }
