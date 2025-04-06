@@ -159,12 +159,16 @@ async function sendReminderMessage(year) {
     const channel = await client.channels.fetch(MORNING_CHANNEL_ID);
     if (!channel) return console.error("Channel not found");
 
-    await channel.send({
-      content: `@everyone\n\n📚 **Reminder for ${year} students**\n\nPlease make sure to **revise today's notes** after reaching home! Consistency is key 🔑`
+    const sentMessage = await channel.send({
+      content: `@everyone\n\n📚 **Reminder for ${year} students**\n\nPlease make sure to **revise today's notes** after reaching home! Consistency is key 🔑\n\n✅ Please react to this message with a ✅ once you're done reading this message.`
     });
 
-    console.log(`Reminder message sent for ${year} students`);
+    // React with a check mark
+    await sentMessage.react('✅');
+
+    console.log(`Reminder message sent and reaction added for ${year} students`);
   } catch (error) {
     console.error(`Error sending reminder message for ${year}:`, error);
   }
 }
+
